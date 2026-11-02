@@ -8,7 +8,7 @@ This package has **not been pushed** to GitHub. The following steps publish it w
 
 ## Recommended: publish from a fresh checkout
 
-Extract figure-studio-v0.2.zip first. Keep the whole extracted figure-studio folder, including vendor and .nojekyll. In PowerShell, set the package path to the extracted folder that contains index.html:
+Extract figure-studio-v0.2.1.zip first. Keep the whole extracted figure-studio folder, including vendor and .nojekyll. In PowerShell, set the package path to the extracted folder that contains index.html:
 
 ```powershell
 $packagePath = 'C:\PATH\TO\EXTRACTED\figure-studio'
@@ -46,7 +46,7 @@ Check the repository Actions tab and Pages deployment status, then open https://
 
 ## Deployment acceptance checks
 
-- The header reads v0.2 · Reference edition and the 3D view shows a figure.
+- The header reads v0.2.1 · Reference edition and the 3D view shows a figure.
 - Add a second figure; pose it and verify the first stays unchanged.
 - Select an elbow; positive bend/hyperextension should be clamped. Try both sliders and rotation rings.
 - Solve a wrist target near the body. An unreachable target should report a remaining distance instead of breaking the rig.
@@ -71,3 +71,4 @@ git push origin main
 ```
 
 Keep your downloaded JSON scene backups. Browser storage is local to the browser and website address.
+

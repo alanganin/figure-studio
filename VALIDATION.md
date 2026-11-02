@@ -2,7 +2,7 @@
 
 Tested on November 2, 2026. Node.js 24.22.1; bundled Three.js 0.170.0.
 
-## Automated integration checks: 12 passed
+## Automated integration checks: 14 passed
 
 1. Application startup creates a figure.
 2. Posing a second figure leaves the first pose unchanged.
@@ -32,3 +32,11 @@ Syntax checking also passed for app.js. All runtime JavaScript imports resolve t
 The embedded browser could not reach the local preview server. Native browser automation stopped because it could not establish the browser URL for policy enforcement. No visual QA or successful live browser load is claimed. Follow the deployment acceptance checklist in DEPLOYMENT.md before relying on the app.
 
 The localhost HTTP server itself and its JavaScript MIME response were checked independently of the browser. This verifies file serving, not rendering.
+
+## v0.2.1 regression checks
+
+13. Both actual bundled control modules import successfully and export constructors.
+14. Every application import resolves to an existing local file, and startup uses a catch handler.
+
+These cover the missing-path startup bug that the original mocked-control tests did not detect. Full browser rendering remains unverified.
+

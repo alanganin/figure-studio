@@ -1,6 +1,6 @@
-import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {TransformControls} from 'three/addons/controls/TransformControls.js';
+import * as THREE from './vendor/three.module.js';
+import {OrbitControls} from './vendor/OrbitControls.js';
+import {TransformControls} from './vendor/TransformControls.js';
 
 const $=id=>document.getElementById(id), mount=$('viewport');
 const scene=new THREE.Scene();scene.background=new THREE.Color('#1d2633');scene.fog=new THREE.Fog('#1d2633',18,42);

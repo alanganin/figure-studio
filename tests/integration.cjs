@@ -2,6 +2,8 @@ const fs=require('fs'),assert=require('assert/strict'),path=require('path');
 process.chdir(path.resolve(__dirname,'..'));
 (async()=>{
 const mod=await import('../vendor/three.module.js');
+const actualOrbit=await import('../vendor/OrbitControls.js');
+const actualTransform=await import('../vendor/TransformControls.js');
 const html=fs.readFileSync('index.html','utf8'),elements={};
 for(const m of html.matchAll(/<(\w+)\b([^>]*\bid="([^"]+)"[^>]*)>/g)){const attrs=m[2],value=attrs.match(/\bvalue="([^"]*)"/);elements[m[3]]={value:value?.[1]||'',checked:/\bchecked\b/.test(attrs),hidden:false,textContent:'',innerHTML:'',children:[],style:{},classList:{add(){},remove(){}},append(x){this.children.push(x)},appendChild(x){this.children.push(x)},addEventListener(){},getBoundingClientRect(){return {left:0,top:0,width:1000,height:700}},clientWidth:1000,clientHeight:700};}
 for(const [id,val]of Object.entries({surface:'clay',outerCloth:'none',effector:'leftWrist',exportSize:'1'}))elements[id].value=val;
@@ -13,6 +15,8 @@ const THREE={...mod,WebGLRenderer:Renderer};const document={getElementById:id=>{
 const code=fs.readFileSync('app.js','utf8').replace(/^import .*;\r?\n/gm,'');
 new Function('THREE','OrbitControls','TransformControls','document','window','ResizeObserver','requestAnimationFrame','devicePixelRatio','localStorage','confirm',code)(THREE,Orbit,Transform,document,window,class{observe(){}},()=>{},1,{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)},()=>true);
 const api=window.figureStudio,results=[];function test(name,fn){fn();results.push(name);console.log('PASS '+name)}
+test('Bundled control modules resolve and export their constructors',()=>{assert.equal(typeof actualOrbit.OrbitControls,'function');assert.equal(typeof actualTransform.TransformControls,'function');});
+test('All application imports point to existing local files',()=>{for(const m of fs.readFileSync('app.js','utf8').matchAll(/^import .*?from ['"]([^'"]+)['"]/gm)){assert(m[1].startsWith('./'));assert(fs.existsSync(path.resolve(m[1])),m[1]);}assert(!html.includes('type="importmap"'));assert(html.includes("import('./app.js?v=0.2.1').catch"));});
 test('Boot creates one independent figure',()=>assert.equal(api.objects.length,1));
 const first=api.objects[0],second=api.figure('Second',1,0);
 test('Preset changes only selected figure',()=>{api.applyPose(second,'action');assert.equal(first.joints.leftHip.rotation.x,0);assert.notEqual(second.joints.leftHip.rotation.x,0)});

@@ -1,6 +1,8 @@
 {
-  "passed": 12,
+  "passed": 14,
   "checks": [
+    "Bundled control modules resolve and export their constructors",
+    "All application imports point to existing local files",
     "Boot creates one independent figure",
     "Preset changes only selected figure",
     "Joint clamp rejects elbow hyperextension",

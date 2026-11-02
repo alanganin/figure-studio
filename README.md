@@ -1,4 +1,4 @@
-# Figure Studio v0.2 — Reference edition
+# Figure Studio v0.2.1 — Reference edition
 
 An expanded version of your recovered v0.1 artist workspace. The static app uses bundled Three.js 0.170.0 and requires no build, npm, account, backend, or CDN. Your original local repository has not been changed.
 
@@ -47,7 +47,7 @@ No third-party human model was bundled: a redistributable, correctly rigged and 
 
 ## Validation and limits
 
-See [VALIDATION.md](VALIDATION.md). Twelve integration checks pass using real Three.js geometry, transforms and quaternions with a mocked browser surface. Actual WebGL rendering, visual appearance, browser file dialogs and downloaded PNG transparency were not verified in this environment. The preview connection timed out and desktop browser automation was blocked by URL verification.
+See [VALIDATION.md](VALIDATION.md). Fourteen integration checks pass using real Three.js geometry, transforms and quaternions with a mocked browser surface. Actual WebGL rendering, visual appearance, browser file dialogs and downloaded PNG transparency were not verified in this environment. The preview connection timed out and desktop browser automation was blocked by URL verification.
 
 Desktop Chrome/Edge with WebGL2 is the intended target. The UI stacks below 730px, but touch/tablet behavior has not been tested. Scene files are capped at 100 objects and 2 MB; practical performance will be lower on small GPUs. No cloud requests or telemetry are made by the app. All runtime dependencies are in vendor/.
 
@@ -60,3 +60,8 @@ Desktop Chrome/Edge with WebGL2 is the intended target. The UI stacks below 730p
 - .nojekyll: static Pages deployment marker.
 
 No third-party character, clothing, texture or image assets are included. Your project's application licensing remains yours to decide; the bundled Three.js license must be retained.
+
+## v0.2.1 startup fix
+
+Corrected the control-module paths that prevented v0.2 from starting. Control imports now use explicit local file paths instead of an import map. Module-load failures display an error in the workspace. Regression checks now import the actual bundled control modules and check every app import path. The two vendor controls have their import specifier changed to the adjacent Three.js module; their license is unchanged.
+
