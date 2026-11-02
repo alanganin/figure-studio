@@ -1,0 +1,17 @@
+{
+  "passed": 12,
+  "checks": [
+    "Boot creates one independent figure",
+    "Preset changes only selected figure",
+    "Joint clamp rejects elbow hyperextension",
+    "IK reduces reachable hand error",
+    "Unreachable IK remains finite and constrained",
+    "Layered wardrobe and fit are independent",
+    "Scene roundtrip preserves pose, layers, props and camera",
+    "Malformed scene rejection keeps current scene",
+    "v0.1 scene migration",
+    "Undo and redo restore scene state",
+    "Orthographic switch retains camera position",
+    "PNG handler restores scene visibility"
+  ]
+}
