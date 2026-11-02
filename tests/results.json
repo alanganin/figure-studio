@@ -1,9 +1,9 @@
 {
-  "passed": 14,
+  "passed": 19,
   "checks": [
     "Bundled control modules resolve and export their constructors",
     "All application imports point to existing local files",
-    "Boot creates one independent figure",
+    "Boot creates a continuous skinned human with 163 bones",
     "Preset changes only selected figure",
     "Joint clamp rejects elbow hyperextension",
     "IK reduces reachable hand error",
@@ -14,6 +14,11 @@
     "v0.1 scene migration",
     "Undo and redo restore scene state",
     "Orthographic switch retains camera position",
-    "PNG handler restores scene visibility"
+    "PNG handler restores scene visibility",
+    "Actual human skin deforms with elbow control",
+    "Human bone and wrist control remain aligned after compound pose",
+    "Separate figures own independent human skeletons",
+    "Clothing is weighted to the same human skeleton",
+    "Grounding evaluates the posed human skin"
   ]
 }

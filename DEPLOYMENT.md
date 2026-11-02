@@ -8,7 +8,7 @@ This package has **not been pushed** to GitHub. The following steps publish it w
 
 ## Recommended: publish from a fresh checkout
 
-Extract figure-studio-v0.2.1.zip first. Keep the whole extracted figure-studio folder, including vendor and .nojekyll. In PowerShell, set the package path to the extracted folder that contains index.html:
+Extract figure-studio-v0.3.0.zip first. Keep the whole extracted figure-studio folder, including vendor, assets, all three human modules, and .nojekyll. In PowerShell, set the package path to the extracted folder that contains index.html:
 
 ```powershell
 $packagePath = 'C:\PATH\TO\EXTRACTED\figure-studio'
@@ -46,7 +46,7 @@ Check the repository Actions tab and Pages deployment status, then open https://
 
 ## Deployment acceptance checks
 
-- The header reads v0.2.1 · Reference edition and the 3D view shows a figure.
+- The header reads v0.3.0 and the 3D view shows the continuous human body.
 - Add a second figure; pose it and verify the first stays unchanged.
 - Select an elbow; positive bend/hyperextension should be clamped. Try both sliders and rotation rings.
 - Solve a wrist target near the body. An unreachable target should report a remaining distance instead of breaking the rig.
@@ -57,7 +57,7 @@ Check the repository Actions tab and Pages deployment status, then open https://
 - Export an ordinary PNG and transparent 2× PNG. Open both files and inspect transparency and dimensions.
 - Resize the window and check the orthographic view still has correct proportions.
 
-If the view is blank, check the browser console and Network panel: vendor/three.module.js and both control modules must return 200, not HTML or a 404. Confirm vendor was committed. A file:// address will not work. A browser without WebGL2 will not run the renderer. Advanced anatomy and cloth limitations are documented in README.md.
+If the view is blank, check the browser console and Network panel: vendor/three.module.js and both control modules must return 200, not HTML or a 404. Confirm vendor and assets were committed. A file:// address will not work. A browser without WebGL2 will not run the renderer. Advanced anatomy and cloth limitations are documented in README.md.
 
 ## Roll back
 
@@ -71,4 +71,9 @@ git push origin main
 ```
 
 Keep your downloaded JSON scene backups. Browser storage is local to the browser and website address.
+
+
+## Human edition update
+
+Copy the complete v0.3.0 folder, including assets/human-male.glb, human-glb.js, human-rig.js, and human-figure.js. The model is bundled and needs no separate download at runtime. Keep assets/README.md with its provenance and CC0 reference. After publishing, hard refresh and check the header says v0.3.0. Old mannequin scene files are accepted, but their poses and clothing fit need review on the new proportions.
 

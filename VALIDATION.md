@@ -1,42 +1,43 @@
-# Validation report
+# Figure Studio v0.3.0 validation
 
-Tested on November 2, 2026. Node.js 24.22.1; bundled Three.js 0.170.0.
+November 2, 2026. Node.js 24.22.1 and bundled Three.js 0.170.0.
 
-## Automated integration checks: 14 passed
+## 19 passing integration checks
 
-1. Application startup creates a figure.
-2. Posing a second figure leaves the first pose unchanged.
-3. Elbow hyperextension and non-hinge axes clamp.
-4. Wrist IK reduces error and reaches a nearby target within 8 cm.
-5. Unreachable ankle target remains finite with constrained knee bend.
-6. Clothing layers and fit remain independent per figure.
-7. Scene roundtrip preserves pose, wardrobe, props, lighting and camera state.
-8. Malformed scene input is rejected before clearing the current scene.
-9. v0.1 scenes migrate with default values for added fields.
-10. Undo and redo restore object counts and scene state.
-11. Orthographic camera switching preserves camera position.
-12. PNG handler restores scene visibility after export.
+The checks in tests/integration.cjs execute the application against the actual bundled MakeHuman-derived GLB and real Three.js geometry, bones, inverse bind matrices and skinning math. DOM, WebGLRenderer, browser storage and interactive controls are test doubles.
 
-The harness runs the actual application against real Three.js scene objects and math. It replaces the DOM, renderer, browser storage, and controls with test doubles. It does **not** verify rotation-ring interaction, GPU rendering, pixel appearance, browser downloads, dialogs, file selection, or PNG alpha pixels.
+1. Actual bundled OrbitControls and TransformControls modules import and export constructors.
+2. Application import paths exist locally; startup has an error handler.
+3. Startup creates the real skinned human with 163 bones and a main surface over 60,000 vertices.
+4. Presets change only the intended figure.
+5. Elbow hyperextension/non-hinge rotations clamp.
+6. Nearby wrist IK reduces endpoint error below 8 cm.
+7. An unreachable ankle target remains finite and knee-constrained.
+8. Clothing layers and fit remain independent between figures.
+9. Scene roundtrip preserves transforms, pose, wardrobe, props, camera and settings.
+10. Malformed scene input is rejected before clearing the current scene.
+11. Version 1 scene migration supplies defaults.
+12. Undo/redo restores scene states.
+13. Orthographic switching preserves camera position.
+14. PNG handler restores scene visibility after capture.
+15. Moving the elbow deforms actual weighted forearm vertices.
+16. Actual wrist bone and its control remain aligned within 1 mm after compound chest/shoulder/elbow rotations.
+17. Separate figures own separate skeletons and bones.
+18. Generated garments are skinned to the figure's human skeleton.
+19. Grounding evaluates the posed surface and places its lowest point at ground height.
 
-To rerun with optional Node.js installed, from this folder:
+At the initial pose, sampled skin positions agree with the supplied bind geometry within 0.002 mm. The verified rig map is root→pelvis, spine04→spine, spine02→chest, neck01→neck, head→head, upperarm01→shoulder, lowerarm01→elbow, wrist→wrist, upperleg01→hip, lowerleg01→knee and foot→ankle for each side. MakeHuman's spine numbering is reversed relative to many generic skeletons, so this is an asset-specific verified mapping.
 
-```powershell
-node .\tests\integration.cjs
-```
+## Visual inspection
 
-Syntax checking also passed for app.js. All runtime JavaScript imports resolve to local vendor files.
+The actual model was rendered with an independent software rasterizer using the same parsing, rigging and Three.js skinning modules. A-pose, bent-arm pose and clothed bent-arm pose renders were inspected. They show a continuous human with face, hands, fingers, feet and toes. Garment layers follow the deformed body. Clothing boundaries are triangulated/tight shells and may show seams or clipping; no loose-cloth or corrective-deformation claim is made.
 
-## Browser verification still required
+These renders verify asset appearance and deformation outside a browser. They are not browser screenshots and do not validate WebGL behavior.
 
-The embedded browser could not reach the local preview server. Native browser automation stopped because it could not establish the browser URL for policy enforcement. No visual QA or successful live browser load is claimed. Follow the deployment acceptance checklist in DEPLOYMENT.md before relying on the app.
+## Remaining browser acceptance checks
 
-The localhost HTTP server itself and its JavaScript MIME response were checked independently of the browser. This verifies file serving, not rendering.
+Browser/GPU rendering, interactive rotation-ring drags, file dialogs, saved browser downloads and transparent PNG pixels remain unverified. The prior embedded preview connection timed out; desktop browser automation was stopped by URL verification. This release does not claim those checks passed.
 
-## v0.2.1 regression checks
+Follow DEPLOYMENT.md after replacing all project files, including the new assets folder and human modules. Verify the header says v0.3.0 and the human appears on first load. Check the browser Network panel for a successful human-male.glb response if loading fails.
 
-13. Both actual bundled control modules import successfully and export constructors.
-14. Every application import resolves to an existing local file, and startup uses a catch handler.
-
-These cover the missing-path startup bug that the original mocked-control tests did not detect. Full browser rendering remains unverified.
-
+The supplied local server was syntax-checked after adding the GLB MIME type. The previous static server page/module response check passed in v0.2; no new live HTTP/browser check is claimed for v0.3.0.

@@ -1,67 +1,81 @@
-# Figure Studio v0.2.1 — Reference edition
+# Figure Studio v0.3.0 — Rigged human edition
 
-An expanded version of your recovered v0.1 artist workspace. The static app uses bundled Three.js 0.170.0 and requires no build, npm, account, backend, or CDN. Your original local repository has not been changed.
+This release replaces the procedural mannequin with the MakeHuman-derived human GLB supplied for this project. The default figure is now a continuous skinned human with modeled facial features, hands, fingers, feet and toes. Each figure has its own 163-bone skeleton and skin weights.
 
-## Start
+The included model is 4,498,248 bytes and contains 109,064 triangles across seven skinned surfaces. It is displayed as a neutral clay sculpture. It is a human base mesh, not an exposed-muscle atlas or a photorealistic scanned person.
 
-Open PowerShell in this folder and run:
+## Run locally — no Node, npm or Python required
+
+Open PowerShell in the extracted figure-studio folder:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Start-Local.ps1
 ```
 
-Open http://127.0.0.1:8080 in Chrome or Edge. Keep PowerShell open; press Ctrl+C to stop the server. The execution-policy flag applies only to this one process. Alternatively use any static HTTP server. Opening index.html by double-click is unsupported because browser modules require HTTP. No Node.js or Python is needed for the supplied server.
+Open http://127.0.0.1:8080 in Chrome or Edge. Keep PowerShell open. Press Ctrl+C to stop the server. The execution-policy flag applies to that process only.
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for your existing GitHub Pages repository and update commands.
+The whole folder must be served over HTTP/HTTPS. Double-clicking index.html with a file:// address is unsupported. All dependencies and the human model are bundled locally; there are no runtime CDN requests.
 
-## Workflow
+See DEPLOYMENT.md for updating https://alanganin.github.io/figure-studio/.
 
-1. Add figures and props with Scene controls. Select an object row to move its root with arrows or position fields. Duplicate preserves its pose and wardrobe.
-2. Select a joint from the inspector menu, or enable Joint handles and click one. Drag rotation rings or use the three sliders. Limits apply to both methods. Elbows and knees are hinges.
-3. Presets apply to the selected figure only. Use Mirror for bilateral poses. Use Place feet on ground after crouching or changing scale; for sitting, position the root at the stool height instead. There is no automatic seat/contact solver.
-4. Reach target solves a hand or ankle toward the entered **world coordinates**, in approximate meters. An unreachable target reports residual distance. You can reach toward a prop or a second figure by entering a point near it; the target is not pinned when the prop moves.
-5. Choose top, bottom, jacket, colors, ease, sleeve length, and body build independently per figure. Select Whole figure to move it instead of a joint.
-6. Orbit with left drag, pan with right drag, zoom with the wheel. Choose front/side/top or orthographic and adjust the lens. The orthographic view has no perspective convergence.
-7. Use clay, muscle study tint, wireframe or silhouette for reference. The 60-second timer supports gesture studies; it does not draw or record strokes.
-8. Save Scene downloads portable JSON. Open Scene accepts v0.1 and v0.2 files. Character files store one posed and clothed figure; pose files store joint rotations only.
-9. Undo/Redo retains up to 60 completed snapshots, including camera and lighting. Ctrl+Z / Ctrl+Shift+Z work outside text fields. Latest scene recovery uses this browser's local storage. It is not a substitute for JSON backups, and storage differs between localhost and your Pages site.
-10. Export PNG produces the viewport at 1× or 2× size, with selection helpers hidden. Transparent export also hides the floor and grid. PNG export is a still image, not a 3D model export.
+## What changed
 
-## Honest capability boundaries
+- The original GLB geometry and skin weights replace the spheres, cylinders and boxes used for the mannequin. There is no mannequin fallback.
+- Seventeen main pose controls drive the actual body skeleton. The model's remaining bones, including fingers, toes and facial bones, retain their authored pose and follow their parents; this release does not expose individual finger or face controls.
+- Joint controls store rotation deltas separately from the model's bind rotations. Resetting a control preserves the human's original bone alignment.
+- A-pose resets to the supplied asset's pose, with arms angled out from the body. Other presets, rotation rings, constrained wrist/ankle IK, and Mirror work on each figure independently.
+- Tops, pants, shorts and jackets are generated as fitted skinned surface layers using this human's geometry and weights. They share its skeleton and bend with the body. They are tight surface shells, not loose tailored garments or cloth simulation.
+- Clicking the skin selects a nearby pose control. Enable Joint handles or use Select joint for precise selection.
+- Place feet on ground evaluates the deformed human surface rather than its rest-pose box.
+- Save/load, duplication, character and pose files, undo/redo, lighting, cameras, PNG export and props remain available.
 
-This is a functional reference-workspace release, **not completion of the high-fidelity anatomy and physical simulation milestones**.
+## How to use
 
-| Planned area | Implemented here | Remaining specialist work |
-|---|---|---|
-| Anatomy | Rounded procedural body volumes, broad proportions, articulated spine/pelvis, joint limits | Realistic continuous human mesh, authored skin weights, shoulder/scapula coordination, hands/fingers and anatomical validation |
-| IK | Constrained iterative wrist/ankle reach on each independent rig | Whole-body balance, collision, contact locks, pole-vector controls and retargeting |
-| Muscle | Illustrative surface tint and small biceps volume change with elbow flexion | Anatomical muscle simulation, tendons, fat, corrective deformation and scientific accuracy |
-| Wardrobe | Tops, shorts/pants, jacket, per-figure colors, ease, sleeve length, layering | Continuous skinned cloth, collision, sewing patterns, fabric dynamics and convincing wrinkles |
-| Scene | Multiple figures, independent pose/wardrobe, props, stool, root transforms, duplication | Automatic interaction/contact and collision prevention |
-| Artist tools | Camera views, orthographic/perspective, key/ambient lighting, grid, study timer, PNG | Drawing canvas, animation timeline and arbitrary model import |
-| Projects | JSON scenes, legacy load, character/pose files, 60-step history, local recovery | Cloud sync, collaboration and full file-version migration tooling |
+1. The initial human loads automatically. Use + Figure for another independently posed body; select object rows to move whole figures.
+2. Select a joint from the inspector, a visible handle, or the skin. Use the rotation rings or sliders. Joint limits apply to both.
+3. Use Reach target with world coordinates in approximate meters. An unreachable target reports remaining distance. Targets are one-shot solves, not pins attached to props.
+4. Add garments and adjust colors, ease, sleeve length and approximate body width. Cloth edges follow mesh topology and can look jagged; extreme poses and large ease values can clip or show gaps.
+5. Left-drag to orbit, right-drag to pan, wheel to zoom. Switch perspective/orthographic, views, lighting and study surfaces as needed.
+6. Save Scene for a portable JSON backup. Character files hold one posed figure and outfit; pose files hold joint deltas. Browser recovery is local to this site address and browser.
+7. Export PNG captures the viewport without selection helpers. Transparent export hides the floor and grid. Check the downloaded image in your browser; actual browser PNG downloads were not verified here.
 
-The body is built from overlapping articulated volumes, not a continuous skinned human. It may show seams and intersections in extreme poses. Joint limits are conservative artistic approximations, not clinical measurements. Clothing shells follow rigid body segments and can clip or separate at joints. Build adjusts width/depth; it does not regenerate anatomy. The muscle tint is not an anatomical atlas.
+## Compatibility
 
-No third-party human model was bundled: a redistributable, correctly rigged and tested anatomical model was not available in the recovered project. The app does not pretend arbitrary GLBs can be posed with this rig. MakeHuman/MPFB core assets are a possible CC0 production source, but each eventual asset must be checked and rigged for this app before inclusion. See [MakeHuman licensing](https://www.makehumancommunity.org/about/license.html).
+New scenes use format version 3 and model identifier makehuman-male-v1. The human mesh is bundled once in assets/human-male.glb; scene JSON references that model and does not duplicate its binary data.
 
-## Validation and limits
+Version 1 and 2 scene files still open. Their mannequin rotations are applied to the new human control rig, so proportions and limb placement will differ. Review imported poses, clothing and contact with props. Old pose files likewise need review. Keep original JSON backups.
 
-See [VALIDATION.md](VALIDATION.md). Fourteen integration checks pass using real Three.js geometry, transforms and quaternions with a mocked browser surface. Actual WebGL rendering, visual appearance, browser file dialogs and downloaded PNG transparency were not verified in this environment. The preview connection timed out and desktop browser automation was blocked by URL verification.
+The human edition uses a new browser recovery key (figure-studio-v3), avoiding silent replacement of your old recovered mannequin session. Open an older saved JSON explicitly to migrate it.
 
-Desktop Chrome/Edge with WebGL2 is the intended target. The UI stacks below 730px, but touch/tablet behavior has not been tested. Scene files are capped at 100 objects and 2 MB; practical performance will be lower on small GPUs. No cloud requests or telemetry are made by the app. All runtime dependencies are in vendor/.
+## Limits
 
-## Files and credits
+This is actual weighted skeletal deformation, not scientific muscle simulation. There are no authored shoulder/elbow corrective shapes, soft-tissue dynamics, automatic balance, collisions, contact locks or physical cloth. Extreme poses can pinch or self-intersect. Joint ranges are artistic approximations rather than biomechanical measurements. Width scales the body and clothing; it is not a MakeHuman morph generator.
 
-- index.html, styles.css, app.js: application, extended from your recovered local v0.1.
-- vendor/: Three.js core and controls, MIT license in vendor/THREE-LICENSE.txt.
-- Start-Local.ps1: optional PowerShell-only loopback HTTP server.
-- tests/integration.cjs: optional Node.js integration tests; Node is not needed to run or deploy the app.
-- .nojekyll: static Pages deployment marker.
+The study loader supports this bundled, uncompressed GLB's geometry and skeleton. It intentionally does not implement arbitrary model import, embedded texture rendering, morph targets or animation playback. The muscle study surface is an illustrative tint, not a medical diagram.
 
-No third-party character, clothing, texture or image assets are included. Your project's application licensing remains yours to decide; the bundled Three.js license must be retained.
+The scene file limit remains 100 objects; detailed humans and their garments will reach practical GPU limits much sooner. Desktop Chrome/Edge with WebGL2 is the target. Touch/tablet interaction is not validated.
 
-## v0.2.1 startup fix
+## Validation
 
-Corrected the control-module paths that prevented v0.2 from starting. Control imports now use explicit local file paths instead of an import map. Module-load failures display an error in the workspace. Regression checks now import the actual bundled control modules and check every app import path. The two vendor controls have their import specifier changed to the adjacent Three.js module; their license is unchanged.
+Nineteen integration checks pass using the actual bundled human asset and Three.js geometry/skeleton math. Two independent skeletons, skin deformation, compound control alignment, fitted garment weights, legacy scene loading and scene roundtrip are covered. Software renders of the actual model were inspected in A-pose, bent-arm pose and clothed pose.
 
+Full browser rendering, dialogs and downloaded PNG pixels remain unverified in this environment. See VALIDATION.md and the deployment acceptance checklist.
+
+Optional tests, if Node.js is installed:
+
+```powershell
+node .\tests\integration.cjs
+```
+
+Node is not needed to run or deploy the app.
+
+## Credits and files
+
+- assets/human-male.glb: MakeHuman-derived body, published by Innerscene under CC0. See assets/README.md for the source and checksum.
+- vendor/: Three.js 0.170.0 and controls, MIT. Keep vendor/THREE-LICENSE.txt. Controls have local import paths patched.
+- human-glb.js: focused uncompressed GLB study loader.
+- human-rig.js: verified mapping and bind-pose-preserving control adapter.
+- human-figure.js: independent human instances, skinned fitted clothing and grounding.
+- app.js, index.html, styles.css: artist workspace, extended from your recovered v0.1.
+
+Your original local repository has not been changed or pushed. Your application-code licensing remains yours to decide; third-party asset and library terms are recorded with the package.

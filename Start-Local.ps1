@@ -32,6 +32,7 @@ try {
                     '.js' { 'text/javascript; charset=utf-8' }
                     '.css' { 'text/css; charset=utf-8' }
                     '.json' { 'application/json; charset=utf-8' }
+                    '.glb' { 'model/gltf-binary' }
                     '.md' { 'text/plain; charset=utf-8' }
                     default { 'application/octet-stream' }
                 }
